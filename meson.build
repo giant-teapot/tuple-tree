@@ -1,7 +1,8 @@
 project('tuple-tree', 
     'cpp',
     version : '0.0.1',
-    license : 'ISC'
+    license : 'ISC',
+    default_options : ['cpp_std=c++14']
 )
 
 tupletree_dep = declare_dependency(
