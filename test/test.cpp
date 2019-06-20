@@ -32,3 +32,8 @@ TEST_CASE( "Sub tuple type", "[ttree-properties]") {
     REQUIRE(std::is_same<T1::SubTuple, char>::value);
     REQUIRE(std::is_same<T2::SubTuple, std::tuple<int, double>>::value);
 }
+
+TEST_CASE( "Insert a tuple into a tree", "[ttree-insert]") {
+    ttree::Ttree<char, int, double> tree{};
+    tree.push('a', 10, 10.);
+}

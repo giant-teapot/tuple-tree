@@ -12,10 +12,23 @@ template <typename T, typename ...U> class Ttree {
     using SubTree = Ttree<U...>;
 
     public:
-    Ttree() = default;
+    Ttree()                   = default;
+    Ttree(const Ttree& other) = default;
+    Ttree(Ttree&& other)      = default;
     
     constexpr std::size_t getHeight() const noexcept {
         return std::tuple_size<TupleType>::value;
+    }
+
+    void push(T elem, U... rest) noexcept {
+        const auto& itSubtree =  _payload.find(elem);
+        if(itSubtree != std::end(_payload)) {
+            itSubtree->second.push(rest...);
+        }
+        else {
+            auto newSubtree = _payload.emplace(std::make_pair(std::move(elem), SubTree{}));
+            newSubtree.first->second.push(rest...);
+        }
     }
 
     private:
@@ -37,6 +50,10 @@ template <typename T1, typename T2> class Ttree<T1, T2> {
     
     constexpr std::size_t getHeight() const noexcept {
         return std::tuple_size<TupleType>::value;
+    }
+
+    void push(T1 elem, T2 value) noexcept {
+        _payload.emplace(std::make_pair(std::move(elem), std::move(value)));
     }
 
     private:
