@@ -36,4 +36,5 @@ TEST_CASE( "Sub tuple type", "[ttree-properties]") {
 TEST_CASE( "Insert a tuple into a tree", "[ttree-insert]") {
     ttree::Ttree<char, int, double> tree{};
     tree.push('a', 10, 10.);
+    REQUIRE(tree['a'][10] == 10.);
 }
