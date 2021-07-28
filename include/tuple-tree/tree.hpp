@@ -20,15 +20,19 @@ template <typename T, typename ...U> class Ttree {
         return std::tuple_size<TupleType>::value;
     }
 
-    void push(T elem, U... rest) noexcept {
+    void push(T&& elem, U... rest) noexcept {
         const auto& itSubtree =  _payload.find(elem);
         if(itSubtree != std::end(_payload)) {
-            itSubtree->second.push(rest...);
+            itSubtree->second.push(std::forward<U>(rest)...);
         }
         else {
-            auto newSubtree = _payload.emplace(std::make_pair(std::move(elem), SubTree{}));
-            newSubtree.first->second.push(rest...);
+            auto newSubtree = _payload.emplace(std::make_pair(std::forward<T>(elem), SubTree{}));
+            newSubtree.first->second.push(std::forward<U>(rest)...);
         }
+    }
+
+    bool has(const T& key) const noexcept {
+        return _payload.find(key) != std::cend(_payload);
     }
 
     const SubTree& operator[](const T& key) const {
@@ -58,6 +62,10 @@ template <typename T1, typename T2> class Ttree<T1, T2> {
 
     void push(T1 elem, T2 value) noexcept {
         _payload.emplace(std::make_pair(std::move(elem), std::move(value)));
+    }
+
+    bool has(T1 key) const noexcept {
+        return _payload.find(key) != std::cend(_payload);
     }
 
     const T2& operator[](const T1& key) const {
