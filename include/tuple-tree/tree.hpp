@@ -39,6 +39,14 @@ template <typename T, typename ...U> class Ttree {
         return _payload.at(key);
     }
 
+    const std::size_t size() const noexcept {
+        std::size_t size = 0;
+        for (auto&& item : _payload) {
+            size += item.second.size();
+        }
+        return size;
+    }
+
     private:
     constexpr static std::size_t tuple_size = std::tuple_size<TupleType>::value;
     static_assert(tuple_size >= 2, "Cannot instantiate a Ttree with a single element");
@@ -70,6 +78,10 @@ template <typename T1, typename T2> class Ttree<T1, T2> {
 
     const T2& operator[](const T1& key) const {
         return _payload.at(key);
+    }
+
+    std::size_t size() const noexcept {
+        return _payload.size();
     }
 
     private:
